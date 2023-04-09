@@ -10,6 +10,6 @@ newCustomerForm.addEventListener('submit', (e) => {
   const email = e.target.querySelector('[data-email]').value;
 
   customerService
-    .createCustomers(name, email)
+    .createCustomer(name, email)
     .then((window.location.href = '../telas/cadastro_concluido.html'));
 });
