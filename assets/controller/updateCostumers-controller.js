@@ -1,20 +1,20 @@
 'use strict';
 import { customerService } from '../service/client-service.js';
 
-const id = new URL(window.location).searchParams.get('id');
-const nameInput = document.querySelector('[data-nome]');
-const emailInput = document.querySelector('[data-email]');
-const form = document.querySelector('[data-form]');
+(async () => {
+  const id = new URL(window.location).searchParams.get('id');
+  const nameInput = document.querySelector('[data-nome]');
+  const emailInput = document.querySelector('[data-email]');
+  const form = document.querySelector('[data-form]');
 
-customerService.searchCostumer(id).then((data) => {
-  nameInput.value = data.name;
-  emailInput.value = data.email;
-});
+  const customer = await customerService.searchCostumer(id);
+  nameInput.value = customer.name;
+  emailInput.value = customer.email;
 
-form.addEventListener('submit', (e) => {
-  e.preventDefault();
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
 
-  customerService
-    .updateCostumer(id, nameInput.value, emailInput.value)
-    .then(() => (window.location.href = '../telas/edicao_concluida.html'));
-});
+    await customerService.updateCostumer(id, nameInput.value, emailInput.value);
+    window.location.href = '../telas/edicao_concluida.html';
+  });
+})();

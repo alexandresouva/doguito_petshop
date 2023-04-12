@@ -20,21 +20,25 @@ function createNewCustomer(name, email, id) {
   return customerLine;
 }
 
-customerService.listCustomers().then((data) =>
-  data.forEach((element) => {
+const listCustomers = async () => {
+  const customers = await customerService.listCustomers();
+  customers.forEach((customer) =>
     customerTable.appendChild(
-      createNewCustomer(element.name, element.email, element.id)
-    );
-  })
-);
+      createNewCustomer(customer.name, customer.email, customer.id)
+    )
+  );
+};
 
-// Considerar alocar a função remover em um arquivo separado
-customerTable.addEventListener('click', (e) => {
+const removeCustomer = async (e) => {
   const isADeleteBtn = e.target.className.includes('botao-simples--excluir');
   if (isADeleteBtn) {
     const customerLine = e.target.closest('[data-id]');
     const id = customerLine.getAttribute('data-id');
 
-    customerService.removeCustomer(id).then(customerLine.remove());
+    await customerService.removeCustomer(id);
+    customerLine.remove();
   }
-});
+};
+
+customerTable.addEventListener('click', (e) => removeCustomer(e));
+listCustomers();
