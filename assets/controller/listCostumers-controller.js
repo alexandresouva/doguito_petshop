@@ -21,12 +21,19 @@ function createNewCustomer(name, email, id) {
 }
 
 const listCustomers = async () => {
-  const customers = await customerService.listCustomers();
-  customers.forEach((customer) =>
-    customerTable.appendChild(
-      createNewCustomer(customer.name, customer.email, customer.id)
-    )
-  );
+  try {
+    const customers = await customerService.listCustomers();
+    customers.forEach((customer) =>
+      customerTable.appendChild(
+        createNewCustomer(customer.name, customer.email, customer.id)
+      )
+    );
+  } catch (err) {
+    alert(
+      'Houve um erro na listagem de clientes. Tente novamente em alguns instantes.'
+    );
+    console.error(err);
+  }
 };
 
 const removeCustomer = async (e) => {
@@ -35,8 +42,15 @@ const removeCustomer = async (e) => {
     const customerLine = e.target.closest('[data-id]');
     const id = customerLine.getAttribute('data-id');
 
-    await customerService.removeCustomer(id);
-    customerLine.remove();
+    try {
+      await customerService.removeCustomer(id);
+      customerLine.remove();
+    } catch (err) {
+      alert(
+        'Houve um erro para excluir o cliente. Tente novamente em alguns instantes.'
+      );
+      console.error(err);
+    }
   }
 };
 
